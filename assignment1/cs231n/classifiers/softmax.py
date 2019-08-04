@@ -32,8 +32,33 @@ def softmax_loss_naive(W, X, y, reg):
     # regularization!                                                           #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    N = X.shape[0]
+    # nb of classes
+    C = W.shape[1]
+    
+    # loop over the examples
+    for i in range(N):
+        # compute the logits
+        z = np.dot(X[i,:], W)
+        # for numerical stability
+        z = z - np.max(z)
+                
+        # update the loss
+        loss += -z[y[i]] + np.log(np.sum(np.exp(z)))
+        
+        for j in range(C):
+            # update the gradient
+            if j == y[i]:
+                dW[:, j] += -X[i,:]
+            dW[:, j] += 1/np.sum(np.exp(z)) * np.exp(z[j]) * X[i,:]
+        
+    # normalization
+    loss /= N
+    dW /= N
 
-    pass
+    # add the regularization term
+    loss += reg * np.sum(W**2)
+    dW += 2*reg * W
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
