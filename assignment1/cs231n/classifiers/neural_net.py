@@ -79,9 +79,16 @@ class TwoLayerNet(object):
         # shape (N, C).                                                             #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        pass
-
+#         print(np.hstack((X, np.ones((N, 1)))).shape, np.vstack((W1, np.expand_dims(b1, axis = 0))).shape)
+        Z1 = np.dot(X, W1) + b1
+        A1 = np.maximum(Z1, 0)
+        scores = np.dot(A1, W2) + b2
+        
+        # for numerical stability
+        Z2 = scores - np.max(scores, axis=1, keepdims=True)
+        
+        exp_Z2 = np.exp(Z2)
+        Y_hat = exp_Z2 / np.sum(exp_Z2, axis=1, keepdims=True)
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         # If the targets are not given then jump out, we're done
@@ -90,6 +97,7 @@ class TwoLayerNet(object):
 
         # Compute the loss
         loss = None
+        
         #############################################################################
         # TODO: Finish the forward pass, and compute the loss. This should include  #
         # both the data loss and L2 regularization for W1 and W2. Store the result  #
@@ -97,9 +105,10 @@ class TwoLayerNet(object):
         # classifier loss.                                                          #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        pass
-
+        C = y.shape[0]
+        y_onehot = np.array([[j==y[i] for j in range(C)] for i in range(N)])
+        loss = -np.mean(Z2[np.arange(N), y]) + np.mean(np.log(np.sum(np.exp(Z2), axis=1)))
+        loss += reg * (np.sum(W1**2) + np.sum(W2**2))
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         # Backward pass: compute gradients

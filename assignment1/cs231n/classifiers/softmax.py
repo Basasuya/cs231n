@@ -82,8 +82,32 @@ def softmax_loss_vectorized(W, X, y, reg):
     # regularization!                                                           #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    N = X.shape[0]
+    C = W.shape[1]
+    
+    # compute the logits
+    Z = np.dot(X, W)
+    # for numerical stability
+    Z = Z - np.max(Z, axis=1, keepdims=True)
+    
+    # compute the predictions
+    exp_Z = np.exp(Z)
+    Y_hat = exp_Z / np.sum(exp_Z, axis=1, keepdims = True)
+    
+    # convert labels to one-hot
+    y_onehot = np.array([[j==y[i] for j in range(C)] for i in range(N)])
+        
+    # compute the loss
+    loss = -np.mean(Z[np.arange(N), y]) + np.mean(np.log(np.sum(np.exp(Z), axis=1)))
+    
+    # compute the gradient
+    #dW = 1/N * (-np.dot(X.T, y_onehot) + np.dot(X.T, 1/np.sum(np.exp(Z), axis=1, keepdims=True) * np.exp(Z)))
+    dW = 1/N * np.dot(X.T, Y_hat - y_onehot)
+    
+    # add the regularization term
+    loss += reg * np.sum(W**2)
+    dW += 2*reg * W
 
-    pass
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
