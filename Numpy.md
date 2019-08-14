@@ -26,5 +26,15 @@ a[[0,1], [1,0]]
 ```
 
 * 如果想选择二维数组每行的不同元素，可以通过np.choose(choose, array)，默认对于array的行进行选择
-* np.hstack((a,b))对于两个二维数组　进行行合并，
+* np.hstack((a,b))对于两个二维数组　进行行合并，np.vstack((a,b))同理进行列合并
+* 如果手动制作cross-validation
+
+```python
+X_train_folds = np.array_split(X_train, num_folds)
+X_train_tmp = np.concatenate(X_train_folds[:i] + X_train_folds[i+1:], axis=0)
+X_val_tmp = X_train_folds[i]
+
+```
+
+
 
