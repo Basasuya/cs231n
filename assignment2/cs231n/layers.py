@@ -66,7 +66,7 @@ def affine_backward(dout, cache):
     X = x.reshape((x.shape[0], -1))
     dw = np.dot(X.T, dout)
     dx = np.dot(dout, w.T).reshape(x.shape)
-    db = np.ones(M)
+    db = np.sum(dout, axis = 0)
     
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -93,7 +93,7 @@ def relu_forward(x):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    out = np.maximum(x, 0)
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -119,7 +119,7 @@ def relu_backward(dout, cache):
     # TODO: Implement the ReLU backward pass.                                 #
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
+    dx = (x > 0) * dout
     pass
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -771,6 +771,7 @@ def svm_loss(x, y):
     - dx: Gradient of the loss with respect to x
     """
     N = x.shape[0]
+    
     correct_class_scores = x[np.arange(N), y]
     margins = np.maximum(0, x - correct_class_scores[:, np.newaxis] + 1.0)
     margins[np.arange(N), y] = 0

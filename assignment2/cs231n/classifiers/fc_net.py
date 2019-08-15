@@ -48,8 +48,11 @@ class TwoLayerNet(object):
         # weights and biases using the keys 'W2' and 'b2'.                         #
         ############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        pass
+        self.params['W1'] = np.randn((input_dim, hidden_dim))
+        self.params['b1'] = np.zeros(hidden_dim)
+        self.params['W2'] = np.randn((hidden_dim, num_classes))
+        self.params['b2'] = np.zeros(num_classes)
+#         pass
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         ############################################################################
@@ -82,8 +85,16 @@ class TwoLayerNet(object):
         # class scores for X and storing them in the scores variable.              #
         ############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        pass
+        
+        W1 = self.params['W1']
+        b1 = self.params['b1']
+        W2 = self.params['W2']
+        b2 = self.params['b2']
+        
+        Mid1, cache1 = affine_relu_forward(X, W1, b1)
+        scores, cache2 = affine_forward(Mid1, W2, b2)
+#         svm_loss(scores, y)
+        
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         ############################################################################
