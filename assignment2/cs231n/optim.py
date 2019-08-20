@@ -67,8 +67,20 @@ def sgd_momentum(w, dw, config=None):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
-
+    learning_rate = config['learning_rate']
+    momentum = config['momentum']
+    
+    # momentum update rule
+#     v = momentum * v - learning_rate * dw
+#     w += v
+    
+#     # update 
+#     next_w = w
+    
+    v_prev = v # back this up
+    v = momentum * v - learning_rate * dw # velocity update stays the same
+    w += -momentum * v_prev + (1 + momentum) * v 
+    next_w = w
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -104,9 +116,16 @@ def rmsprop(w, dw, config=None):
     # config['cache'].                                                        #
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-    pass
-
+    
+    decay_rate = config['decay_rate']
+    eps = config['epsilon']
+    learning_rate = config['learning_rate']
+    cache = config['cache']
+    cache = decay_rate * cache + (1 - decay_rate) * dw**2
+    w += - learning_rate * dw / (np.sqrt(cache) + eps)
+    next_w = w
+    config['cache'] = cache
+    
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -149,7 +168,31 @@ def adam(w, dw, config=None):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    learning_rate = config['learning_rate']
+    beta1 = config['beta1']
+    beta2 = config['beta2']
+    epsilon = config['epsilon']
+    t = config['t']
+
+    # retrieve running average
+    m = config['m']
+    v = config['v']
+
+    # Adam update rule
+    t += 1
+    m = beta1*m + (1-beta1)*dw # momentum
+    mt = m / (1-beta1**t) # bias correction
+    
+    v = beta2*v + (1-beta2)*(dw**2) # RMSProp
+    vt = v / (1-beta2**t) # bias correction
+    
+    w += - learning_rate * mt / (np.sqrt(vt) + epsilon) # Adam
+
+    # update 
+    next_w = w
+    config['m'] = m
+    config['v'] = v
+    config['t'] = t
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
