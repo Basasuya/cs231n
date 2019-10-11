@@ -77,7 +77,6 @@ class KNearestNeighbor(object):
                 #####################################################################
                 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
                 dists[i][j] = np.sqrt(np.sum(np.square(X[i] - self.X_train[j])))
-#                 pass
 
                 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -101,7 +100,6 @@ class KNearestNeighbor(object):
             #######################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
             dists[i, :] = np.sqrt(np.sum(np.square(X[i] - self.X_train), axis=1))
-            pass
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -130,11 +128,7 @@ class KNearestNeighbor(object):
         #       and two broadcast sums.                                         #
         #########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-#         print(np.sum(X**2, axis=1).shape, np.expand_dims(np.sum(X**2, axis=1), axis=1).shape)
         dists = np.sqrt(np.expand_dims(np.sum(X**2, axis=1), axis=1) + np.expand_dims(np.sum(self.X_train**2, axis=1), axis=0) - 2*np.dot(X, self.X_train.T))
-        
-#         dists = np.sqrt(np.sum(np.square(X - self.X_train), axis=1))
-#         pass
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -167,8 +161,6 @@ class KNearestNeighbor(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
             closest_y = self.y_train[np.argsort(dists[i,:])[:k]]
-#             pass
-
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
             #########################################################################
             # TODO:                                                                 #
@@ -178,14 +170,9 @@ class KNearestNeighbor(object):
             # label.                                                                #
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-            distinct_labels = sorted(list(set(closest_y))) # sort the list to get the smaller label in case of ties
-            # count the nb of label occurences in the nearest train neighbours
+            distinct_labels = sorted(list(set(closest_y))) 
             count_labels = [np.sum(closest_y == label) for label in distinct_labels]
-#             print(count_labels)
-            # find the most common label
             y_pred[i] = distinct_labels[np.argmax(count_labels)]
-#             print(np.argmax(count_labels))
-#             pass
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 

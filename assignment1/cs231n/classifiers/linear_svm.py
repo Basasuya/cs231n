@@ -37,7 +37,6 @@ def svm_loss_naive(W, X, y, reg):
             margin = scores[j] - correct_class_score + 1 # note delta = 1
             if margin > 0:
                 loss += margin
-#                 print(X[i,:].shape, dW[:,j].shape)
                 dW[:,j] +=  X[i,:]
                 dW[:,y[i]] -=  X[i,:]
 
@@ -85,12 +84,9 @@ def svm_loss_vectorized(W, X, y, reg):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     scores = np.dot(X, W) # (num_train, num_classes)
-    # margins
     margins = 1 - np.expand_dims(np.choose(y, scores.T), axis=1) + scores # (num_train, num_classes)
     margins[np.arange(num_train), y] = 0 
-    # loss (vectorized)
     loss = 1/num_train * np.sum(np.maximum(0, margins)) + reg*np.sum(W**2)
-#     pass
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
